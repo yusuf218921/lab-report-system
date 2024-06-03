@@ -16,7 +16,7 @@ public class LabTechnician {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lab_technician_id")
-    private Long id;
+    private Long labTechnicianId;
 
     @Column(name = "first_name")
     private String firstName;
