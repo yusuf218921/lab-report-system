@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LabTechnicianRepository extends JpaRepository<LabTechnician, Long> {
+
 }

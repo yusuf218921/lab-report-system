@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Data
@@ -38,6 +38,7 @@ public class Report {
     private String diagnosisDetails;
 
     @Column(name = "report_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date reportDate;
 
     @Lob
@@ -47,7 +48,4 @@ public class Report {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lan_technician_id", nullable = false)
     private LabTechnician labTechnician;
-
-
-
 }
