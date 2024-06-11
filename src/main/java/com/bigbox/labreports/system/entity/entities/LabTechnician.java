@@ -29,4 +29,8 @@ public class LabTechnician {
 
     @OneToMany(mappedBy = "labTechnician", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> reports;
+
+    public LabTechnician(Long id){
+        labTechnicianId = id;
+    }
 }

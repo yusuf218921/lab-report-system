@@ -41,7 +41,7 @@ public class LabTechnicianImpl implements LabTechnicianService {
     @Override
     public DataResult<LabTechnician> addLabTechnician(LabTechnicianForAddRequest request) {
         LabTechnician labTechnician = modelMapper.map(request, LabTechnician.class);
-        labTechnician = labTechnicianRepository.save(labTechnician);
+        labTechnicianRepository.save(labTechnician);
         return new SuccessDataResult<>(labTechnician, "Lab technician added successfully");
     }
 
