@@ -46,6 +46,6 @@ public class Report {
     private byte[] reportImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lan_technician_id", nullable = false)
+    @JoinColumn(name = "lab_technician_id", nullable = false)
     private LabTechnician labTechnician;
 }

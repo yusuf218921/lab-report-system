@@ -1,4 +1,4 @@
-package com.bigbox.labreports.system.entity.dtos;
+package com.bigbox.labreports.system.entity.dtos.report;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

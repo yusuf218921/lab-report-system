@@ -4,10 +4,10 @@ import com.bigbox.labreports.system.core.results.DataResult;
 import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.core.results.SuccessDataResult;
 import com.bigbox.labreports.system.core.results.SuccessResult;
-import com.bigbox.labreports.system.entity.dtos.ReportForAddRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForDeleteRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForListRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForUpdateRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForAddRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForDeleteRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForListRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForUpdateRequest;
 import com.bigbox.labreports.system.entity.entities.Report;
 import com.bigbox.labreports.system.repository.ReportRepository;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,11 +45,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public DataResult<Page<Report>> getAllPage(ReportForListRequest request) {
         Pageable pageable = PageRequest.of(request.getPageNo(), request.getPageSize());
-        if(request.getSortDirection() == null){
-            return new SuccessDataResult<>(reportRepository.findReportsByPatientAndTechnician(request, pageable));
-        } else {
             return new SuccessDataResult<>(reportRepository.findReportsByPatientAndTechnicianWithSort(request, pageable));
-        }
     }
 
     @Override
@@ -95,4 +90,6 @@ public class ReportServiceImpl implements ReportService {
 
         return new SuccessDataResult<>(reportRepository.save(report));
     }
+
+    // TODO: rapor ekleme silme ve güncelleme metodları için rol bazlı sistem eklenecek
 }

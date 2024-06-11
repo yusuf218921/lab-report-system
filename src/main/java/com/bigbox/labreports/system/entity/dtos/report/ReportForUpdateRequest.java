@@ -1,12 +1,13 @@
-package com.bigbox.labreports.system.entity.dtos;
-
+package com.bigbox.labreports.system.entity.dtos.report;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+
 @Getter
 @Setter
-public class ReportForAddRequest {
+public class ReportForUpdateRequest {
 
+    private Long reportId;
     private String fileNumber;
     private String patientFirstName;
     private String patientLastName;

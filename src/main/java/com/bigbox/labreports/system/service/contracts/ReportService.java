@@ -2,14 +2,13 @@ package com.bigbox.labreports.system.service.contracts;
 
 import com.bigbox.labreports.system.core.results.DataResult;
 import com.bigbox.labreports.system.core.results.Result;
-import com.bigbox.labreports.system.entity.dtos.ReportForAddRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForDeleteRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForListRequest;
-import com.bigbox.labreports.system.entity.dtos.ReportForUpdateRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForAddRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForDeleteRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForListRequest;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForUpdateRequest;
 import com.bigbox.labreports.system.entity.entities.Report;
 import org.springframework.data.domain.Page;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.text.ParseException;
 
