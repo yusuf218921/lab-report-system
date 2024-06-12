@@ -19,13 +19,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class LabTechnicianImpl implements LabTechnicianService {
+public class LabTechnicianServiceImpl implements LabTechnicianService {
 
     private final LabTechnicianRepository labTechnicianRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public LabTechnicianImpl(LabTechnicianRepository labTechnicianRepository, ModelMapper modelMapper) {
+    public LabTechnicianServiceImpl(LabTechnicianRepository labTechnicianRepository, ModelMapper modelMapper) {
         this.labTechnicianRepository = labTechnicianRepository;
         this.modelMapper = modelMapper;
     }
