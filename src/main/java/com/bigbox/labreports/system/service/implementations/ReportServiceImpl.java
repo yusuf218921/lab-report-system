@@ -92,4 +92,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     // TODO: rapor ekleme silme ve güncelleme metodları için rol bazlı sistem eklenecek
+    // TODO: raporId ye göre rapor getirme eklenecek bu metoda özel bi dto yazılacak ayrıca list metodu için response dtosu yazılacak
+    // TODO: Unit testler yazılacak
 }

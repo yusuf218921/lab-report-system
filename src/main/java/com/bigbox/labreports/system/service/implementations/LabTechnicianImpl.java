@@ -1,6 +1,7 @@
 package com.bigbox.labreports.system.service.implementations;
 
 import com.bigbox.labreports.system.core.results.DataResult;
+import com.bigbox.labreports.system.core.results.ErrorResult;
 import com.bigbox.labreports.system.core.results.ErrorDataResult;
 import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.core.results.SuccessDataResult;
@@ -65,7 +66,9 @@ public class LabTechnicianImpl implements LabTechnicianService {
             labTechnicianRepository.deleteById(request.getLabTechnicianId());
             return new SuccessResult("Lab technician deleted successfully");
         } else {
-            return new ErrorDataResult<>("Lab technician not found");
+            return new ErrorResult("Lab technician not found");
         }
     }
+
+    // TODO: Unit test yazılacak
 }
