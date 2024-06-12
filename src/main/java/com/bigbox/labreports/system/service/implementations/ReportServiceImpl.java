@@ -1,9 +1,6 @@
 package com.bigbox.labreports.system.service.implementations;
 
-import com.bigbox.labreports.system.core.results.DataResult;
-import com.bigbox.labreports.system.core.results.Result;
-import com.bigbox.labreports.system.core.results.SuccessDataResult;
-import com.bigbox.labreports.system.core.results.SuccessResult;
+import com.bigbox.labreports.system.core.results.*;
 import com.bigbox.labreports.system.entity.dtos.report.ReportForAddRequest;
 import com.bigbox.labreports.system.entity.dtos.report.ReportForDeleteRequest;
 import com.bigbox.labreports.system.entity.dtos.report.ReportForListRequest;
@@ -50,6 +47,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public DataResult<Report> addReport(ReportForAddRequest request) throws IOException, ParseException {
+        if(!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())
+            return new ErrorDataResult<>("Lab technician not found");
+
         Report report = modelMapper.map(request, Report.class);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -69,12 +69,19 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Result deleteReport(ReportForDeleteRequest request) {
+        if(reportRepository.findById(request.getReportId()).isEmpty())
+            return new ErrorDataResult<>("Report not found");
         reportRepository.deleteById(request.getReportId());
         return new SuccessResult("Report deleted successfully");
     }
 
     @Override
     public DataResult<Report> updateReport(ReportForUpdateRequest request) throws IOException, ParseException {
+        if(reportRepository.findById(request.getReportId()).isEmpty())
+            return new ErrorDataResult<>("Report not found");
+        if(!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())
+            return new ErrorDataResult<>("Lab technician not found");
+
         Report report = modelMapper.map(request, Report.class);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
