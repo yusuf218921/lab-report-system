@@ -66,12 +66,10 @@ public class AuthServiceImpl implements AuthService {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            List<String> roles = userDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
+            User user = userRepository.findByUsername(userForLogin.getUsername());
+            List<String> roles = userRepository.findRolesByUserId(user.getUserId());
 
-            String token = jwtUtil.generateToken(userForLogin.getUsername(), roles);
+            String token = jwtUtil.generateToken(user.getUsername(), roles);
             return new SuccessDataResult<>(token, "Login successful");
         } catch (Exception e) {
             return new ErrorDataResult<>("Invalid username or password");

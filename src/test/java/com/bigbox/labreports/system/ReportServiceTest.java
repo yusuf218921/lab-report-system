@@ -4,10 +4,7 @@ import com.bigbox.labreports.system.core.results.DataResult;
 import com.bigbox.labreports.system.core.results.ErrorDataResult;
 import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.core.results.SuccessDataResult;
-import com.bigbox.labreports.system.entity.dtos.report.ReportForAddRequest;
-import com.bigbox.labreports.system.entity.dtos.report.ReportForDeleteRequest;
-import com.bigbox.labreports.system.entity.dtos.report.ReportForListRequest;
-import com.bigbox.labreports.system.entity.dtos.report.ReportForUpdateRequest;
+import com.bigbox.labreports.system.entity.dtos.report.*;
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import com.bigbox.labreports.system.entity.entities.Report;
 import com.bigbox.labreports.system.repository.ReportRepository;
@@ -27,13 +24,13 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +58,7 @@ public class ReportServiceTest {
     @BeforeEach
     void setUp() {
         labTechnician = new LabTechnician(1L, "John", "Doe", "12345", null);
-        report = new Report(1L, "F12345", "Jane", "Smith", "P123456", "Diagnosis Title", "Diagnosis Details", new Date(), null, labTechnician);
+        report = new Report(1L, "F12345", "Jane", "Smith", "P123456", "Diagnosis Title", "Diagnosis Details", new Date(), "sampleImageBytes".getBytes(), labTechnician);
 
         reportForAddRequest = new ReportForAddRequest();
         reportForAddRequest.setFileNumber("F12345");
@@ -175,11 +172,68 @@ public class ReportServiceTest {
         when(reportRepository.findReportsByPatientAndTechnicianWithSort(any(ReportForListRequest.class), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(Collections.singletonList(report), pageable, 1));
 
-        DataResult<Page<Report>> result = reportService.getAllPage(reportForListRequest);
+        ReportForListResponse reportForListResponse = new ReportForListResponse(
+                report.getFileNumber(),
+                report.getPatientFirstName(),
+                report.getPatientLastName(),
+                report.getPatientIdNumber(),
+                report.getReportDate().toString(),
+                report.getLabTechnician()
+        );
+
+        when(modelMapper.map(any(Report.class), eq(ReportForListResponse.class))).thenReturn(reportForListResponse);
+
+        DataResult<Page<ReportForListResponse>> result = reportService.getAllReportsWithPage(reportForListRequest);
 
         assertTrue(result.isSuccess());
         assertEquals(1, result.getData().getTotalElements());
-        assertEquals(report, result.getData().getContent().get(0));
+        assertEquals(reportForListResponse, result.getData().getContent().get(0));
+    }
+
+    @Test
+    void testGetReportById() {
+        // Mock the report and the response
+        ReportForGetResponse reportForGetResponse = new ReportForGetResponse(
+                report.getReportId(),
+                report.getFileNumber(),
+                report.getPatientFirstName(),
+                report.getPatientLastName(),
+                report.getPatientIdNumber(),
+                report.getDiagnosisTitle(),
+                report.getDiagnosisDetails(),
+                report.getReportDate().toString(),
+                Base64.getEncoder().encodeToString(report.getReportImage()),
+                new ReportForGetResponse.LabTechnicianResponse(
+                        report.getLabTechnician().getLabTechnicianId(),
+                        report.getLabTechnician().getFirstName(),
+                        report.getLabTechnician().getLastName(),
+                        report.getLabTechnician().getHospitalIdNumber()
+                )
+        );
+
+        // Set up the mocks
+        when(reportRepository.findById(anyLong())).thenReturn(Optional.of(report));
+        when(modelMapper.map(report, ReportForGetResponse.class)).thenReturn(reportForGetResponse);
+
+        // Call the service
+        DataResult<ReportForGetResponse> result = reportService.getReportById(1L);
+
+        // Verify the result
+        assertTrue(result.isSuccess());
+        assertEquals(reportForGetResponse, result.getData());
+    }
+
+    @Test
+    void testGetNonExistentReportById() {
+        // Set up the mocks
+        when(reportRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Call the service
+        DataResult<ReportForGetResponse> result = reportService.getReportById(1L);
+
+        // Verify the result
+        assertFalse(result.isSuccess());
+        assertEquals("Report not found", result.getMessage());
     }
 
 }

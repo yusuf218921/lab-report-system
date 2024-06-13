@@ -9,6 +9,8 @@ import com.bigbox.labreports.system.core.results.SuccessResult;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForAddRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForDeleteRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForUpdateRequest;
+import com.bigbox.labreports.system.entity.dtos.report.LabTechnicianForGetResponse;
+import com.bigbox.labreports.system.entity.dtos.report.ReportForListResponse;
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import com.bigbox.labreports.system.repository.LabTechnicianRepository;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
@@ -16,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,18 +26,22 @@ public class LabTechnicianServiceImpl implements LabTechnicianService {
 
     private final LabTechnicianRepository labTechnicianRepository;
     private final ModelMapper modelMapper;
+    private final ReportHelper reportHelper;
 
     @Autowired
-    public LabTechnicianServiceImpl(LabTechnicianRepository labTechnicianRepository, ModelMapper modelMapper) {
+    public LabTechnicianServiceImpl(LabTechnicianRepository labTechnicianRepository,
+                                    ModelMapper modelMapper,
+                                    ReportHelper reportHelper) {
         this.labTechnicianRepository = labTechnicianRepository;
         this.modelMapper = modelMapper;
+        this.reportHelper = reportHelper;
     }
 
     @Override
     public DataResult<LabTechnician> getById(long id) {
         Optional<LabTechnician> result = labTechnicianRepository.findById(id);
-        if(result.isPresent())
-            return new  SuccessDataResult<>(result.get());
+        if (result.isPresent())
+            return new SuccessDataResult<>(result.get());
         else
             return new ErrorDataResult<>("Lab technician not found");
     }
@@ -45,7 +52,6 @@ public class LabTechnicianServiceImpl implements LabTechnicianService {
         labTechnicianRepository.save(labTechnician);
         return new SuccessDataResult<>(labTechnician, "Lab technician added successfully");
     }
-
 
     @Override
     public DataResult<LabTechnician> updateLabTechnician(LabTechnicianForUpdateRequest request) {
@@ -62,7 +68,7 @@ public class LabTechnicianServiceImpl implements LabTechnicianService {
 
     @Override
     public Result deleteLabTechnician(LabTechnicianForDeleteRequest request) {
-        if(labTechnicianRepository.existsById(request.getLabTechnicianId())) {
+        if (labTechnicianRepository.existsById(request.getLabTechnicianId())) {
             labTechnicianRepository.deleteById(request.getLabTechnicianId());
             return new SuccessResult("Lab technician deleted successfully");
         } else {
@@ -70,5 +76,19 @@ public class LabTechnicianServiceImpl implements LabTechnicianService {
         }
     }
 
-    // TODO: Unit test yazılacak
+    @Override
+    public DataResult<LabTechnicianForGetResponse> getByIdReturnResponseDto(Long id) {
+        Optional<LabTechnician> labTechnicianOptional = labTechnicianRepository.findById(id);
+        if (labTechnicianOptional.isEmpty()) {
+            return new ErrorDataResult<>("Lab technician not found");
+        }
+        LabTechnician labTechnician = labTechnicianOptional.get();
+        LabTechnicianForGetResponse response = modelMapper.map(labTechnician, LabTechnicianForGetResponse.class);
+
+        List<ReportForListResponse> reports = reportHelper.getReportsByLabTechnicianId(labTechnician.getLabTechnicianId(), modelMapper);
+        response.setReports(reports);
+
+        return new SuccessDataResult<>(response, "Lab technician retrieved successfully");
+    }
 }
+

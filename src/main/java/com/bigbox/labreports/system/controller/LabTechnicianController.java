@@ -5,6 +5,7 @@ import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForAddRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForDeleteRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForUpdateRequest;
+import com.bigbox.labreports.system.entity.dtos.report.LabTechnicianForGetResponse;
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class LabTechnicianController {
     }
 
     @GetMapping("/{id}")
-    public DataResult<LabTechnician> getById(@PathVariable long id) {
-        return labTechnicianService.getById(id);
+    public DataResult<LabTechnicianForGetResponse> getById(@PathVariable long id) {
+        return labTechnicianService.getByIdReturnResponseDto(id);
     }
 
     @PostMapping
