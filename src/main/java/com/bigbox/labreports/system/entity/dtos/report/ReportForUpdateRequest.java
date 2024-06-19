@@ -19,6 +19,6 @@ public class ReportForUpdateRequest {
     private String diagnosisTitle;
     private String diagnosisDetails;
     private String reportDate;
-    private MultipartFile reportImage;
+    private MultipartFile reportImage =  null;
     private Long labTechnicianId;
 }

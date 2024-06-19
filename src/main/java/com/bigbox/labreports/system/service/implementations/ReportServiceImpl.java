@@ -64,9 +64,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public DataResult<Report> addReport(ReportForAddRequest request) throws IOException, ParseException {
+    public Result addReport(ReportForAddRequest request) throws IOException, ParseException {
         if (!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())
-            return new ErrorDataResult<>("Lab technician not found");
+            return new ErrorResult("Lab technician not found");
 
         Report report = modelMapper.map(request, Report.class);
 
@@ -80,8 +80,8 @@ public class ReportServiceImpl implements ReportService {
         }
 
         report.setLabTechnician(labTechnicianService.getById(request.getLabTechnicianId()).getData());
-
-        return new SuccessDataResult<>(reportRepository.save(report));
+        reportRepository.save(report);
+        return new SuccessResult("report is added");
     }
 
     @Override
@@ -93,11 +93,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public DataResult<Report> updateReport(ReportForUpdateRequest request) throws IOException, ParseException {
+    public Result updateReport(ReportForUpdateRequest request) throws IOException, ParseException {
         if (reportRepository.findById(request.getReportId()).isEmpty())
-            return new ErrorDataResult<>("Report not found");
+            return new ErrorResult("Report not found");
         if (!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())
-            return new ErrorDataResult<>("Lab technician not found");
+            return new ErrorResult("Lab technician not found");
 
         Report report = modelMapper.map(request, Report.class);
 
@@ -111,8 +111,8 @@ public class ReportServiceImpl implements ReportService {
         }
 
         report.setLabTechnician(labTechnicianService.getById(request.getLabTechnicianId()).getData());
-
-        return new SuccessDataResult<>(reportRepository.save(report));
+        reportRepository.save(report);
+        return new SuccessResult("report is updated");
     }
 
     @Override
@@ -125,12 +125,17 @@ public class ReportServiceImpl implements ReportService {
         Report report = reportOptional.get();
         ReportForGetResponse response = modelMapper.map(report, ReportForGetResponse.class);
 
-        response.setReportImage(Base64.getEncoder().encodeToString(report.getReportImage()));
+        if (report.getReportImage() != null) {
+            response.setReportImage(Base64.getEncoder().encodeToString(report.getReportImage()));
+        } else {
+            response.setReportImage(null);
+        }
 
         ReportForGetResponse.LabTechnicianResponse labTechnicianResponse = modelMapper.map(report.getLabTechnician(), ReportForGetResponse.LabTechnicianResponse.class);
         response.setLabTechnician(labTechnicianResponse);
 
         return new SuccessDataResult<>(response);
     }
+
 }
 

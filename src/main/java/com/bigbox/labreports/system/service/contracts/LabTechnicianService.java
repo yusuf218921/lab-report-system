@@ -16,10 +16,10 @@ public interface LabTechnicianService {
     DataResult<LabTechnician> getById(long id);
 
     @PreAuthorize("hasRole('ADMIN')")
-    DataResult<LabTechnician> addLabTechnician(LabTechnicianForAddRequest request);
+    Result addLabTechnician(LabTechnicianForAddRequest request);
 
     @PreAuthorize("hasRole('ADMIN')")
-    DataResult<LabTechnician> updateLabTechnician(LabTechnicianForUpdateRequest request);
+    Result updateLabTechnician(LabTechnicianForUpdateRequest request);
 
     @PreAuthorize("hasRole('ADMIN')")
     Result deleteLabTechnician(LabTechnicianForDeleteRequest request);

@@ -17,13 +17,13 @@ public interface ReportService {
     DataResult<Page<ReportForListResponse>> getAllReportsWithPage(ReportForListRequest request);
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    DataResult<Report>  addReport(ReportForAddRequest request) throws IOException, ParseException;
+    Result  addReport(ReportForAddRequest request) throws IOException, ParseException;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     Result deleteReport(ReportForDeleteRequest request);
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    DataResult<Report> updateReport(ReportForUpdateRequest request) throws IOException, ParseException;
+    Result updateReport(ReportForUpdateRequest request) throws IOException, ParseException;
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     DataResult<ReportForGetResponse> getReportById(Long reportId);

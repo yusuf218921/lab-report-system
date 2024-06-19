@@ -1,6 +1,7 @@
 package com.bigbox.labreports.system.controller;
 
 import com.bigbox.labreports.system.core.results.DataResult;
+import com.bigbox.labreports.system.core.results.ErrorDataResult;
 import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.entity.dtos.report.*;
 import com.bigbox.labreports.system.entity.entities.Report;
@@ -35,7 +36,7 @@ public class ReportController {
     }
 
     @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<DataResult<Report>> addReport(
+    public ResponseEntity<Result> addReport(
             @RequestPart("report") String reportString,
             @RequestPart("reportImage") MultipartFile reportImage
     ) throws IOException, ParseException {
@@ -43,13 +44,26 @@ public class ReportController {
         ReportForAddRequest request = objectMapper.readValue(reportString, ReportForAddRequest.class);
 
         request.setReportImage(reportImage);
-        DataResult<Report> result = reportService.addReport(request);
+        Result result = reportService.addReport(request);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping
-    public ResponseEntity<DataResult<Report>> updateReport(@RequestBody ReportForUpdateRequest request) throws IOException, ParseException {
-        DataResult<Report> result = reportService.updateReport(request);
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<Result> updateReport(
+            @PathVariable Long id,
+            @RequestPart("report") String reportString,
+            @RequestPart("reportImage") MultipartFile reportImage
+    ) throws IOException, ParseException {
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ReportForUpdateRequest request = objectMapper.readValue(reportString, ReportForUpdateRequest.class);
+        if(!id.equals(request.getReportId())){
+            return new ResponseEntity<>(new ErrorDataResult<>(null,"id does not match") , HttpStatus.BAD_REQUEST);
+        }
+        request.setReportId(id);
+        request.setReportImage(reportImage);
+        Result result = reportService.updateReport(request);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 

@@ -47,22 +47,22 @@ public class LabTechnicianServiceImpl implements LabTechnicianService {
     }
 
     @Override
-    public DataResult<LabTechnician> addLabTechnician(LabTechnicianForAddRequest request) {
+    public Result addLabTechnician(LabTechnicianForAddRequest request) {
         LabTechnician labTechnician = modelMapper.map(request, LabTechnician.class);
         labTechnicianRepository.save(labTechnician);
-        return new SuccessDataResult<>(labTechnician, "Lab technician added successfully");
+        return new SuccessResult("Lab technician added successfully");
     }
 
     @Override
-    public DataResult<LabTechnician> updateLabTechnician(LabTechnicianForUpdateRequest request) {
+    public Result updateLabTechnician(LabTechnicianForUpdateRequest request) {
         Optional<LabTechnician> optionalLabTechnician = labTechnicianRepository.findById(request.getLabTechnicianId());
         if (optionalLabTechnician.isPresent()) {
             LabTechnician labTechnician = optionalLabTechnician.get();
             modelMapper.map(request, labTechnician);
             labTechnicianRepository.save(labTechnician);
-            return new SuccessDataResult<>(labTechnician, "Lab technician updated successfully");
+            return new SuccessResult("Lab technician updated successfully");
         } else {
-            return new ErrorDataResult<>("Lab technician not found");
+            return new ErrorResult("Lab technician not found");
         }
     }
 

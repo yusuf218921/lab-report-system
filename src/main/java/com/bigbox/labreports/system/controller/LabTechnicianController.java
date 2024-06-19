@@ -9,10 +9,12 @@ import com.bigbox.labreports.system.entity.dtos.report.LabTechnicianForGetRespon
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/labTechnician")
+@RequestMapping("/api/labTechnicians")
 public class LabTechnicianController {
 
     private final LabTechnicianService labTechnicianService;
@@ -28,13 +30,15 @@ public class LabTechnicianController {
     }
 
     @PostMapping
-    public DataResult<LabTechnician> addLabTechnician(@RequestBody LabTechnicianForAddRequest request) {
-        return labTechnicianService.addLabTechnician(request);
+    public ResponseEntity<Result> addLabTechnician(@RequestBody LabTechnicianForAddRequest request) {
+        Result result = labTechnicianService.addLabTechnician(request);
+        return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
-    public DataResult<LabTechnician> updateLabTechnician(@RequestBody LabTechnicianForUpdateRequest request) {
-        return labTechnicianService.updateLabTechnician(request);
+    public ResponseEntity<Result> updateLabTechnician(@RequestBody LabTechnicianForUpdateRequest request) {
+        Result result = labTechnicianService.updateLabTechnician(request);
+        return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping

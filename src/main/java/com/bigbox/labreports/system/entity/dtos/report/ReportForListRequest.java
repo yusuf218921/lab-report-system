@@ -17,6 +17,11 @@ public class ReportForListRequest {
     private String labTechnicianLastName;
     private String sortDirection;
 
-    private int pageSize;
     private int pageNo;
+    private int pageSize;
+
+    public ReportForListRequest(int pageNo, int pageSize){
+        this.pageNo = pageNo;
+        this.pageSize = pageSize;
+    }
 }
