@@ -1,5 +1,6 @@
-package com.bigbox.labreports.system.entity.dtos.report;
+package com.bigbox.labreports.system.entity.dtos.labTechnician;
 
+import com.bigbox.labreports.system.entity.dtos.report.ReportForListResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

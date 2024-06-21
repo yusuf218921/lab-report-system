@@ -7,6 +7,7 @@ import com.bigbox.labreports.system.entity.dtos.report.*;
 import com.bigbox.labreports.system.entity.entities.Report;
 import com.bigbox.labreports.system.service.contracts.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class ReportController {
 
     @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<Result> addReport(
-            @RequestPart("report") String reportString,
+            @Valid @RequestPart("report") String reportString,
             @RequestPart("reportImage") MultipartFile reportImage
     ) throws IOException, ParseException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -51,7 +52,7 @@ public class ReportController {
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Result> updateReport(
             @PathVariable Long id,
-            @RequestPart("report") String reportString,
+            @Valid @RequestPart("report") String reportString,
             @RequestPart("reportImage") MultipartFile reportImage
     ) throws IOException, ParseException {
 

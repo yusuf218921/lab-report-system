@@ -20,7 +20,6 @@ import org.modelmapper.ModelMapper;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,10 +52,10 @@ public class LabTechnicianServiceTest {
 
     @BeforeEach
     void setUp() {
-        labTechnician = new LabTechnician(1L, "John", "Doe", "12345", null);
-        report = new Report(1L, "File123", "John", "Doe", "12345", "title", "details",  new Date(), null, labTechnician);
-        labTechnicianForAddRequest = new LabTechnicianForAddRequest("John", "Doe", "12345");
-        labTechnicianForUpdateRequest = new LabTechnicianForUpdateRequest(1L, "John", "Doe", "12345");
+        labTechnician = new LabTechnician(1L, "John", "Doe", "H12345", null);
+        report = new Report(1L, "F123", "John", "Doe", "P12345", "title", "details",  new Date(), null, labTechnician);
+        labTechnicianForAddRequest = new LabTechnicianForAddRequest("John", "Doe", "H12345");
+        labTechnicianForUpdateRequest = new LabTechnicianForUpdateRequest(1L, "John", "Doe", "H12345");
         labTechnicianForDeleteRequest = new LabTechnicianForDeleteRequest(1L);
     }
 

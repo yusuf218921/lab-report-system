@@ -5,11 +5,9 @@ import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForAddRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForDeleteRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForUpdateRequest;
-import com.bigbox.labreports.system.entity.dtos.report.LabTechnicianForGetResponse;
+import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForGetResponse;
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import javax.xml.crypto.Data;
 
 public interface LabTechnicianService {
     @PreAuthorize("hasRole('ADMIN')")

@@ -9,7 +9,7 @@ import com.bigbox.labreports.system.core.results.SuccessResult;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForAddRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForDeleteRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForUpdateRequest;
-import com.bigbox.labreports.system.entity.dtos.report.LabTechnicianForGetResponse;
+import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForGetResponse;
 import com.bigbox.labreports.system.entity.dtos.report.ReportForListResponse;
 import com.bigbox.labreports.system.entity.entities.LabTechnician;
 import com.bigbox.labreports.system.repository.LabTechnicianRepository;
