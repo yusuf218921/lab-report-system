@@ -5,6 +5,7 @@ import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.entity.dtos.user.UserForLoginRequest;
 import com.bigbox.labreports.system.entity.dtos.user.UserForRegisterRequest;
 import com.bigbox.labreports.system.service.contracts.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Result> register(@RequestBody UserForRegisterRequest userForRegister) {
+    public ResponseEntity<Result> register(@Valid @RequestBody UserForRegisterRequest userForRegister) {
         Result result = authService.register(userForRegister);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<DataResult<String>> login(@RequestBody UserForLoginRequest userForLogin) {
+    public ResponseEntity<DataResult<String>> login(@Valid @RequestBody UserForLoginRequest userForLogin) {
         DataResult<String> result = authService.login(userForLogin);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

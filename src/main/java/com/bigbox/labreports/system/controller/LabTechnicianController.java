@@ -7,6 +7,7 @@ import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForDe
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForUpdateRequest;
 import com.bigbox.labreports.system.entity.dtos.labTechnician.LabTechnicianForGetResponse;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,13 @@ public class LabTechnicianController {
     }
 
     @PostMapping
-    public ResponseEntity<Result> addLabTechnician(@RequestBody LabTechnicianForAddRequest request) {
+    public ResponseEntity<Result> addLabTechnician(@Valid @RequestBody LabTechnicianForAddRequest request) {
         Result result = labTechnicianService.addLabTechnician(request);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping
-    public ResponseEntity<Result> updateLabTechnician(@RequestBody LabTechnicianForUpdateRequest request) {
+    public ResponseEntity<Result> updateLabTechnician(@Valid @RequestBody LabTechnicianForUpdateRequest request) {
         Result result = labTechnicianService.updateLabTechnician(request);
         return new ResponseEntity<>(result, result.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

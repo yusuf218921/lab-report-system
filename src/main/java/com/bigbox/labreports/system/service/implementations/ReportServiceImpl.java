@@ -6,6 +6,7 @@ import com.bigbox.labreports.system.entity.entities.Report;
 import com.bigbox.labreports.system.repository.ReportRepository;
 import com.bigbox.labreports.system.service.contracts.LabTechnicianService;
 import com.bigbox.labreports.system.service.contracts.ReportService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,7 +65,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Result addReport(ReportForAddRequest request) throws IOException, ParseException {
+    public Result addReport(@Valid ReportForAddRequest request) throws IOException, ParseException {
         if (!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())
             return new ErrorResult("Lab technician not found");
 
@@ -93,7 +94,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Result updateReport(ReportForUpdateRequest request) throws IOException, ParseException {
+    public Result updateReport(@Valid ReportForUpdateRequest request) throws IOException, ParseException {
         if (reportRepository.findById(request.getReportId()).isEmpty())
             return new ErrorResult("Report not found");
         if (!labTechnicianService.getById(request.getLabTechnicianId()).isSuccess())

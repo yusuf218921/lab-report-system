@@ -4,10 +4,9 @@ import com.bigbox.labreports.system.core.results.DataResult;
 import com.bigbox.labreports.system.core.results.ErrorDataResult;
 import com.bigbox.labreports.system.core.results.Result;
 import com.bigbox.labreports.system.entity.dtos.report.*;
-import com.bigbox.labreports.system.entity.entities.Report;
+import jakarta.validation.*;
 import com.bigbox.labreports.system.service.contracts.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -25,9 +25,12 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    private final Validator validator;
+
     @Autowired
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, Validator validator) {
         this.reportService = reportService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -38,11 +41,16 @@ public class ReportController {
 
     @PostMapping(consumes = { "multipart/form-data" })
     public ResponseEntity<Result> addReport(
-            @Valid @RequestPart("report") String reportString,
+            @RequestPart("report") String reportString,
             @RequestPart("reportImage") MultipartFile reportImage
     ) throws IOException, ParseException {
         ObjectMapper objectMapper = new ObjectMapper();
         ReportForAddRequest request = objectMapper.readValue(reportString, ReportForAddRequest.class);
+
+        Set<ConstraintViolation<ReportForAddRequest>> violations = validator.validate(request);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
 
         request.setReportImage(reportImage);
         Result result = reportService.addReport(request);
@@ -52,7 +60,7 @@ public class ReportController {
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<Result> updateReport(
             @PathVariable Long id,
-            @Valid @RequestPart("report") String reportString,
+            @RequestPart("report") String reportString,
             @RequestPart("reportImage") MultipartFile reportImage
     ) throws IOException, ParseException {
 
@@ -62,6 +70,12 @@ public class ReportController {
         if(!id.equals(request.getReportId())){
             return new ResponseEntity<>(new ErrorDataResult<>(null,"id does not match") , HttpStatus.BAD_REQUEST);
         }
+
+        Set<ConstraintViolation<ReportForUpdateRequest>> violations = validator.validate(request);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
         request.setReportId(id);
         request.setReportImage(reportImage);
         Result result = reportService.updateReport(request);
